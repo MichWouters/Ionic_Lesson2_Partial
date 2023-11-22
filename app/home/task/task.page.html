@@ -1,0 +1,54 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>New Task</ion-title>
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="createTask()">
+        <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-item lines="full">
+    <!--
+    The [(ngModel)] directive ensures 2-way databinding, it is a combination
+    of event en property binding. The square brackets indicate property binding
+    and ensure that the data that is stored in the TypeScript logic file (in the
+    variable taskName) is displayed in the form. The parentheses indicate event
+    binding and ensure that the changes that are made by the user in the UI
+    are stored in the variable taskName (in the TypeScript logic file).
+    -->
+    <ion-input type="text" labelPlacement="floating" label="Task name" class="ion-margin-top"
+               [(ngModel)]="taskName"></ion-input>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-textarea label="Description" labelPlacement="floating" cols="20" rows="4"
+                  [autoGrow]="true" [(ngModel)]="description">
+    </ion-textarea>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label>Deadline</ion-label>
+  </ion-item>
+
+  <div>
+    <!--
+    More info about the datetime picker can be found in the official docs.
+    https://ionicframework.com/docs/api/datetime
+    Please note that the datetime picker was completely rewritten for
+    Ionic V6 and any old examples are thus obsolete.
+    -->
+    <ion-datetime firstDayOfWeek="1" [yearValues]="yearValues" style="margin: 0 auto"
+                  presentation="date" [(ngModel)]="deadline">
+    </ion-datetime>
+  </div>
+
+</ion-content>

@@ -1,0 +1,95 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      To-Do
+    </ion-title>
+
+    <ion-select class="ion-padding-horizontal" interface="popover"
+                slot='end' [value]='selectedFilter'
+                (ionChange)='changeFilter($event)'>
+      <ion-select-option *ngFor='let f of filters' [value]="f">
+        {{f}}
+      </ion-select-option>
+    </ion-select>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true"
+             [scrollEvents]="true"
+             (ionScrollStart)="logScrollStart()"
+             (ionScrollEnd)="logScrollEnd()">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">
+        To-Do
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div *ngIf="taskService.tasks.length === 0; else content" class="ion-text-center ion-padding-top">
+    <div>:( No tasks have been added yet</div>
+    <ion-button [routerLink]="['task']">GET STARTED</ion-button>
+  </div>
+
+  <ng-template #content>
+    <ion-list lines="full" *ngIf="taskService.getFilteredTasks(selectedFilter).length > 0; else noMatches">
+      <!--
+      The *ngFor directive allows for iteration over a array or other
+      iterable object. The iteration variable task can be used within the confines
+      of the tag which contains the *ngFor. The *ngFor must always be placed on
+      the tag that is to be repeated, so on the <ion-item> and not on the <ion-list>
+      as this would create multiple lists.
+      -->
+      <ion-item-sliding *ngFor='let task of taskService.getFilteredTasks(selectedFilter)'>
+
+        <ion-item-options side='start'>
+            <ion-item-option color='danger' (click)='taskService.deleteTask(task.id)'>
+                <ion-icon slot="icon-only" name='trash'></ion-icon>
+            </ion-item-option>
+        </ion-item-options>
+    
+        <ion-item>
+            <ion-labelg>
+                {{task.name}}
+            </ion-label>
+            
+            <ion-icon *ngIf='task.done; else notCompleted' name='checkmark-circle'
+                      color='success' (click)='taskService.toggleTaskStatus(task.id)'></ion-icon>
+    
+            <ng-template #notCompleted>
+                <ion-icon name="ellipse-outline"
+                          (click)='taskService.toggleTaskStatus(task.id)'></ion-icon>
+            </ng-template>
+        </ion-item>
+    </ion-item-sliding>
+    </ion-list>
+
+    <ng-template #noMatches>
+      <div class="ion-text-center">
+        <p>No tasks matching the</p>
+        <p>{{selectedFilter}}</p>
+        <p>filter were found!</p>
+      </div>
+    </ng-template>
+
+    <!--
+    The location of the button in the UI is determined by the vertical and
+    horizontal attributes, not by the position of the FAB in the HTML template.
+
+    slot='fixed' ensures that the button doesn't move when the content of the page
+    is scrolled.
+
+    The value for the attribute vertical is retrieved from the logic file via
+    databinding. The square brackets indicate that the value must be retrieved from
+    the TypeScript logic file. Should the value of the variable change, the button
+    will be repositioned according to the new value.
+    -->
+    <ion-fab *ngIf='fabIsVisible' [vertical]='verticalFabPosition' horizontal='end' slot='fixed'>
+      <ion-fab-button [routerLink]="['task']">
+        <ion-icon name='add'></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ng-template>
+
+</ion-content>
