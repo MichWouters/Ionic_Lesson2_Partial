@@ -4,9 +4,8 @@
       To-Do
     </ion-title>
 
-    <ion-select class="ion-padding-horizontal" interface="popover"
-                slot='end' [value]='selectedFilter'
-                (ionChange)='changeFilter($event)'>
+    <ion-select class="ion-padding-horizontal" interface="popover" slot='end' [value]='selectedFilter'
+      (ionChange)='changeFilter($event)'>
       <ion-select-option *ngFor='let f of filters' [value]="f">
         {{f}}
       </ion-select-option>
@@ -15,10 +14,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true"
-             [scrollEvents]="true"
-             (ionScrollStart)="logScrollStart()"
-             (ionScrollEnd)="logScrollEnd()">
+<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScrollStart)="logScrollStart()"
+  (ionScrollEnd)="logScrollEnd()">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">
@@ -44,25 +41,24 @@
       <ion-item-sliding *ngFor='let task of taskService.getFilteredTasks(selectedFilter)'>
 
         <ion-item-options side='start'>
-            <ion-item-option color='danger' (click)='taskService.deleteTask(task.id)'>
-                <ion-icon slot="icon-only" name='trash'></ion-icon>
-            </ion-item-option>
+          <ion-item-option color='danger' (click)='taskService.deleteTask(task.id)'>
+            <ion-icon slot="icon-only" name='trash'></ion-icon>
+          </ion-item-option>
         </ion-item-options>
-    
+
         <ion-item>
-            <ion-label>
-                {{task.name}}
-            </ion-label>
-            
-            <ion-icon *ngIf='task.done; else notCompleted' name='checkmark-circle'
-                      color='success' (click)='taskService.toggleTaskStatus(task.id)'></ion-icon>
-    
-            <ng-template #notCompleted>
-                <ion-icon name="ellipse-outline"
-                          (click)='taskService.toggleTaskStatus(task.id)'></ion-icon>
-            </ng-template>
+          <ion-label [routerLink]="['task', task.id]">
+            {{task.name}}
+          </ion-label>
+
+          <ion-icon *ngIf='task.done; else notCompleted' name='checkmark-circle' color='success'
+            (click)='taskService.toggleTaskStatus(task.id)'></ion-icon>
+
+          <ng-template #notCompleted>
+            <ion-icon name="ellipse-outline" (click)='taskService.toggleTaskStatus(task.id)'></ion-icon>
+          </ng-template>
         </ion-item>
-    </ion-item-sliding>
+      </ion-item-sliding>
     </ion-list>
 
     <ng-template #noMatches>

@@ -19,6 +19,8 @@ export class TaskPage implements OnInit {
   navController = inject(NavController)
   taskService = inject(TaskService)
 
+  activatedRoute = inject(ActivatedRoute)
+
   constructor() {
     // The following code generates a list of years that will be passed as options to the date-time picker.
     // Without this list, the date-time picker doesn't allow the user to choose a past date.
@@ -29,7 +31,25 @@ export class TaskPage implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('Hello World')
+    this.setData()
+  }
+
+  setData(): void {
+    // Get param id from route (see routing)
+    const id = this.activatedRoute.snapshot.paramMap.get('id')
+
+    if (id === null) {
+      return
+    }
+
+    this.id = id
+    const task = this.taskService.getTask(this.id)
+
+    if (task) {
+      this.taskName = task.name
+      this.deadline = task.deadline ?? ''
+      this.description = task.description ?? ''
+    }
   }
 
   /**
@@ -38,16 +58,22 @@ export class TaskPage implements OnInit {
    * Either a new task will be created or an existing task will be updated.
    */
   handleCreateAndUpdate(): void {
+    if (this.id) {
+      this.#updateTask()
+    }
+    else {
+      this.#createTask()
+    }
 
+    this.navController.back();
   }
 
   /**
    * Create a new task with the attributes defined in the form.
    */
-  createTask(): void {
+  #createTask(): void {
     if (this.taskName) {
       this.taskService.createTask(this.taskName, this.description ?? '', this.deadline ?? '')
-      this.navController.back()
     }
   }
 
@@ -55,6 +81,13 @@ export class TaskPage implements OnInit {
    * Update an existing task with the attributes defined in the form.
    */
   #updateTask(): void {
-
+    if (this.id && this.taskName) {
+      this.taskService.updateTask({
+        id: this.id,
+        name: this.taskName,
+        description: this.description ?? '',
+        deadline: this.deadline ?? undefined,
+      })
+    }
   }
 }

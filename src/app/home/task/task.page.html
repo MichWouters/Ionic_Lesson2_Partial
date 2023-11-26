@@ -7,7 +7,7 @@
     </ion-buttons>
 
     <ion-buttons slot="end">
-      <ion-button (click)="createTask()">
+      <ion-button (click)="handleCreateAndUpdate()">
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -26,12 +26,12 @@
     are stored in the variable taskName (in the TypeScript logic file).
     -->
     <ion-input type="text" labelPlacement="floating" label="Task name" class="ion-margin-top"
-               [(ngModel)]="taskName"></ion-input>
+      [(ngModel)]="taskName"></ion-input>
   </ion-item>
 
   <ion-item lines="full">
-    <ion-textarea label="Description" labelPlacement="floating" cols="20" rows="4"
-                  [autoGrow]="true" [(ngModel)]="description">
+    <ion-textarea label="Description" labelPlacement="floating" cols="20" rows="4" [autoGrow]="true"
+      [(ngModel)]="description">
     </ion-textarea>
   </ion-item>
 
@@ -46,8 +46,8 @@
     Please note that the datetime picker was completely rewritten for
     Ionic V6 and any old examples are thus obsolete.
     -->
-    <ion-datetime firstDayOfWeek="1" [yearValues]="yearValues" style="margin: 0 auto"
-                  presentation="date" [(ngModel)]="deadline">
+    <ion-datetime firstDayOfWeek="1" [yearValues]="yearValues" style="margin: 0 auto" presentation="date"
+      [(ngModel)]="deadline">
     </ion-datetime>
   </div>
 

@@ -73,7 +73,15 @@ export class TaskService {
     }
   }
 
-  updateTask(): void {
+  updateTask(updatedTask: Partial<ITask> & { id: string }): void {
+    const task = this.#taskList.find(x => x.id === updatedTask.id)
+
+    if (task === undefined) {
+      console.error('Trying to update a non-existant task.')
+      return
+    }
+
+    Object.assign(task, updatedTask)
   }
 
   /**
